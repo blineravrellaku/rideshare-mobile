@@ -1,0 +1,17 @@
+# Dependencies
+aplikacioni/node_modules/
+
+# Next.js build output
+aplikacioni/.next/
+aplikacioni/out/
+
+# Environment files
+aplikacioni/.env
+aplikacioni/.env.*
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
