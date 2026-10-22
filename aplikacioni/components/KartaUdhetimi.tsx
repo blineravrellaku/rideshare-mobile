@@ -8,9 +8,7 @@ type KartaUdhetimiProps = {
 
 export default function KartaUdhetimi({ udhetim }: KartaUdhetimiProps) {
   const statusTeksti =
-    udhetim.vendetELira === 0
-      ? "E mbushur"
-      : `${udhetim.vendetELira} vende të lira`;
+    udhetim.vende === 0 ? "E mbushur" : `${udhetim.vende} vende të lira`;
 
   return (
     <article className="ride-card">
@@ -18,7 +16,7 @@ export default function KartaUdhetimi({ udhetim }: KartaUdhetimiProps) {
         <span className="ride-card__badge">#{udhetim.id}</span>
         <span
           className={
-            udhetim.vendetELira === 0
+            udhetim.vende === 0
               ? "ride-card__status ride-card__status--sold"
               : "ride-card__status"
           }
@@ -28,12 +26,13 @@ export default function KartaUdhetimi({ udhetim }: KartaUdhetimiProps) {
       </div>
 
       <h2 className="ride-card__title">
-        {udhetim.shoferi}: {udhetim.nisja} → {udhetim.destinacioni}
+        {udhetim.nisja} → {udhetim.destinacioni}
       </h2>
 
       <div className="ride-card__info">
         <p>Ora: {udhetim.ora}</p>
-        <p>Vendet e lira: {udhetim.vendetELira}</p>
+        <p>Vendtakimi: {udhetim.vendtakimi}</p>
+        <p>Vendet e lira: {udhetim.vende}</p>
       </div>
 
       <Link href={`/udhetimi/${udhetim.id}`} className="ride-card__link">

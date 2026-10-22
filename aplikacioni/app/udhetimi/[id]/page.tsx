@@ -3,9 +3,7 @@ import { notFound } from "next/navigation";
 
 import { gjejUdhetimin } from "@/lib/udhetimet";
 
-export function generateStaticParams() {
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
-}
+export const dynamic = "force-dynamic";
 
 type UdhëtimDetajetProps = {
   params: Promise<{ id: string }>;
@@ -13,13 +11,30 @@ type UdhëtimDetajetProps = {
 
 export default async function UdhëtimDetajet({ params }: UdhëtimDetajetProps) {
   const { id } = await params;
-  const udhetim = gjejUdhetimin(id);
+  let udhetim: Awaited<ReturnType<typeof gjejUdhetimin>>;
 
+  try {
+    udhetim = await gjejUdhetimin(id);
+  } catch {
+    return (
+      <main className="page-shell">
+        <div className="phone-shell">
+          <header className="mobile-header">
+            <Link href="/" className="back-link">
+              ← Kthehu?
+            </Link>
+            <h1>Detajet e udhëtimit</h1>
+          </header>
+          <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
+        </div>
+      </main>
+    );
+  }
   if (!udhetim) {
     notFound();
   }
 
-  const kaVende = udhetim.vendetELira > 0;
+  const kaVende = udhetim.vende > 0;
 
   return (
     <main className="page-shell">
@@ -32,7 +47,7 @@ export default async function UdhëtimDetajet({ params }: UdhëtimDetajetProps) 
         </header>
 
         <section className="detail-card">
-          <p className="detail-card__eyebrow">Shoferi: {udhetim.shoferi}</p>
+          <p className="detail-card__eyebrow">Nisja: {udhetim.nisja}</p>
           <h2 className="detail-card__title">
             {udhetim.nisja} → {udhetim.destinacioni}
           </h2>
@@ -43,16 +58,16 @@ export default async function UdhëtimDetajet({ params }: UdhëtimDetajetProps) 
               <strong>{udhetim.ora}</strong>
             </div>
             <div>
-              <span>Kohëzgjatja</span>
-              <strong>{udhetim.koheZgjatja}</strong>
+              <span>Vendtakimi</span>
+              <strong>{udhetim.vendtakimi}</strong>
             </div>
             <div>
               <span>Vendet e lira</span>
-              <strong>{udhetim.vendetELira}</strong>
+              <strong>{udhetim.vende}</strong>
             </div>
             <div>
-              <span>Çmimi</span>
-              <strong>{udhetim.cmimi} €</strong>
+              <span>Destinacioni</span>
+              <strong>{udhetim.destinacioni}</strong>
             </div>
           </div>
 

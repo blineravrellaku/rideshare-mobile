@@ -1,48 +1,32 @@
+import "server-only";
+
+import { getSql } from "./db";
+
 export type Udhetim = {
-  id: number;
-  shoferi: string;
+  id: string;
   nisja: string;
   destinacioni: string;
   ora: string;
-  vendetELira: number;
-  cmimi: number;
-  koheZgjatja: string;
+  vendtakimi: string;
+  vende: number;
 };
 
-export const udhetimet: Udhetim[] = [
-  {
-    id: 1,
-    shoferi: "Arta",
-    nisja: "Prishtina",
-    destinacioni: "AAB",
-    ora: "14:45",
-    vendetELira: 3,
-    cmimi: 3,
-    koheZgjatja: "25 min",
-  },
-  {
-    id: 2,
-    shoferi: "Dren",
-    nisja: "Ferizaj",
-    destinacioni: "AAB",
-    ora: "18:15",
-    vendetELira: 2,
-    cmimi: 5,
-    koheZgjatja: "35 min",
-  },
-  {
-    id: 3,
-    shoferi: "Valon",
-    nisja: "Gjilan",
-    destinacioni: "AAB",
-    ora: "19:30",
-    vendetELira: 0,
-    cmimi: 7,
-    koheZgjatja: "50 min",
-  },
-];
+export async function lexoUdhetimet(): Promise<Udhetim[]> {
+  const sql = getSql();
+  const rows = await sql`
+    SELECT id, nisja, destinacioni, ora, vendtakimi, vende
+    FROM udhetimet ORDER BY id
+  `;
 
-export function gjejUdhetimin(id: number | string): Udhetim | undefined {
-  const numericId = Number(id);
-  return udhetimet.find((udhetim) => udhetim.id === numericId);
+  return rows as Udhetim[];
+}
+
+export async function gjejUdhetimin(id: string): Promise<Udhetim | undefined> {
+  const sql = getSql();
+  const rows = await sql`
+    SELECT id, nisja, destinacioni, ora, vendtakimi, vende
+    FROM udhetimet WHERE id = ${id}
+  `;
+
+  return rows[0] as Udhetim | undefined;
 }
