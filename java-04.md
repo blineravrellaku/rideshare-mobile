@@ -26,7 +26,17 @@ Një versioni i aktualizuar i projektit mbante strukturën e mëposhtme:
 
 ### Hapat e testit
 
-Testi duhet të kryhet duke hapur SQL Editor të Neon, duke ndryshuar orën e një udhëtimi dhe duke rifreskuar listën e aplikacionit. Nëse ndryshimi shfaqet në listë dhe në faqen e detajeve pa ndryshuar kodin, kjo konfirmon që aplikacioni lexon të dhënat nga databaza.
+Në Neon SQL Editor ndryshova orën e udhëtimit me ID 2 në `08:25`:
+
+```sql
+UPDATE udhetimet SET ora = '08:25' WHERE id = '2';
+```
+
+Rifreskova listën dhe faqen `/udhetimi/2`, pastaj e ktheva orën në `08:15`:
+
+```sql
+UPDATE udhetimet SET ora = '08:15' WHERE id = '2';
+```
 
 ### Rezultati real
 
@@ -36,7 +46,7 @@ Lidhja reale me Neon funksionoi dhe databaza ktheu tri udhëtime. Ora e udhëtim
 
 ### Hapat e testit
 
-Testi duhet të kryhet duke ndryshuar përkohësisht query-n e leximit të udhëtimeve në mënyrë që të kthejë zero rreshta, duke e rifreskuar faqen dhe duke kontrolluar mesazhin e statusit. Pastaj query-ja duhet të rikthehet në versionin origjinal.
+Te funksioni `lexoUdhetimet` ndryshova përkohësisht query-n në `FROM udhetimet WHERE false ORDER BY id` dhe rifreskova faqen kryesore. Më pas e hoqa `WHERE false`, rindërtova aplikacionin dhe kontrollova që udhëtimet u shfaqën përsëri.
 
 ### Rezultati real
 
@@ -46,14 +56,14 @@ Query-ja `WHERE false` ktheu zero rreshta dhe faqja shfaqi “Nuk ka udhëtime p
 
 ### Hapat e testit
 
-Testi duhet të kryhet duke riemërtuar përkohësisht `DATABASE_URL` në `.env.local`, duke nisur aplikacionin dhe duke kontrolluar mesazhin e gabimit. Pastaj emri i variablit duhet të rikthehet dhe aplikacioni duhet të funksionojë sërish.
+Hoqa përkohësisht `.env.local` nga vendndodhja e aplikacionit, nisa serverin pa `DATABASE_URL`-in lokal, rifreskova listën dhe faqen e detajeve, pastaj kontrollova edhe `/api/db-test`. Pas provës, e riktheva `.env.local` dhe testova përsëri lidhjen me Neon.
 
 ### Rezultati real
 
-Ky test nuk u krye, sepse `.env.local` ka një lidhje aktive me Neon. Kodi kontrollon në server nëse mungon `DATABASE_URL` dhe faqet shfaqin mesazhin “Nuk u lidhëm me databazën. Provo përsëri.” kur leximi dështon. Mos e publiko skedarin `.env.local`.
+E hoqa përkohësisht `.env.local` nga vendndodhja ku ngarkohet aplikacioni, kështu `DATABASE_URL` mungonte gjatë nisjes. Lista dhe detajet shfaqën “Nuk u lidhëm me databazën. Provo përsëri.”, ndërsa `/api/db-test` ktheu statusin 500. Pastaj e riktheva `.env.local` dhe verifikova që lidhja me Neon punonte sërish.
 
 ## 7. Përfundimi
 
-Java 4 është zbatuar në kod: lista dhe faqet e udhëtimeve lexojnë nga Neon, skema krijon tri udhëtime, dhe kërkesa mbetet vetëm simulim. Lidhja me Neon dhe provat e ndryshimit të orës dhe listës bosh u verifikuan lokalisht. Prova e mungesës së `DATABASE_URL`, konfigurimi i Vercel dhe dorëzimi në GitHub mbeten për t’u kryer.
+Java 4 është zbatuar në kod: lista dhe faqet e udhëtimeve lexojnë nga Neon, skema krijon tri udhëtime, dhe kërkesa mbetet vetëm simulim. Lidhja me Neon dhe të tria provat u verifikuan lokalisht. Konfigurimi i Vercel duhet verifikuar veçmas nëse aplikacioni publikohet atje.
 
 Build-i dhe lint-i kaluan. `DATABASE_URL` është lokal, i përjashtuar nga Git dhe nuk u publikua.
