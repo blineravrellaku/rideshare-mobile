@@ -18,6 +18,9 @@ export default async function Home() {
           <header className="mobile-header mobile-header--list">
             <p className="eyebrow">RideShare</p>
             <h1>Udhëtime të disponueshme</h1>
+            <Link href="/panel" className="back-link">
+              Hyr / Paneli im
+            </Link>
           </header>
           <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
           <Link href="/" className="primary-button">
@@ -34,6 +37,9 @@ export default async function Home() {
         <header className="mobile-header mobile-header--list">
           <p className="eyebrow">RideShare</p>
           <h1>Udhëtime të disponueshme</h1>
+          <Link href="/panel" className="back-link">
+            Hyr / Paneli im
+          </Link>
         </header>
 
         <section className="ride-list" aria-label="Lista e udhëtimeve">
