@@ -59,7 +59,7 @@ Në këtë detyrë nuk kam përdorur AI për të shkruar logjikën ose për të 
 
 ## Para dhe Pas
 - Para: https://github.com/blineravrellaku/rideshare-mobile/commit/924e29d
-- Pas: do të plotësohet pas commit-it të fundit të Java 7
+- Pas: https://github.com/blineravrellaku/rideshare-mobile/commit/9d3a799
 
 ## Versionet e repo-s
 - Repo: https://github.com/blineravrellaku/rideshare-mobile
