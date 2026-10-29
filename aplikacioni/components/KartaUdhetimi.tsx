@@ -8,7 +8,7 @@ type KartaUdhetimiProps = {
 
 export default function KartaUdhetimi({ udhetim }: KartaUdhetimiProps) {
   const statusTeksti =
-    udhetim.vende === 0 ? "E mbushur" : `${udhetim.vende} vende të lira`;
+    udhetim.vende === 0 ? "Nuk ka vende të lira" : `${udhetim.vende} vende të lira`;
 
   return (
     <article className="ride-card">
