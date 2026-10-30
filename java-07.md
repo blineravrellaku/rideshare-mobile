@@ -1,7 +1,7 @@
 # Java 7 · Provo, korrigjo dhe shpjego RideShare-in
 
 ## Rasti im
-Rasti im: P7-103, GitHub: blineravrellaku
+P7-103, GitHub: blineravrellaku
 
 ## Parashikimi
 Pritja ime ishte që kur zgjidhet udhëtimi me ID 2, lista duhet të tregojë 0 vende të lira, detajet duhet të shfaqin nisjen 08:15 dhe vlerën 0 vende, dhe butoni i kërkesës duhet të jetë joaktiv. Kjo është e saktë sipas skenarit të provës, sepse të dhënat duhet të jenë të njëjta në listë dhe në detajet, dhe asnjë rezervim real nuk duhet të simulohet.
@@ -44,13 +44,15 @@ Përdoruesi duhet të marrë një mesazh të qartë “Udhëtimi nuk u gjet” d
 Vëzhgimi:
 Në projektin aktual, faqja e not-found në aplikacion ofron një mesazh të qartë dhe butonin e kthimit. Kjo është një trajtim i dobishëm dhe nuk ngatërron përdoruesin.
 
+## Ndryshimi i ri
+Korrigjimi i bërë: metoda e statusit në aplikacioni/components/KartaUdhetimi.tsx është rishkruar në “Nuk ka vende të lira” për rastin ku vende === 0.
+
 ## Ndihma nga AI
 Në këtë detyrë nuk kam përdorur AI për të shkruar logjikën ose për të bërë ndryshimin final. Kam verifikuar me vëzhgim të projektit, kontrollin e skedarëve dhe testimin e rrjedhës në aplikacion.
 
-## Para dhe Pas
-- Para: https://github.com/blineravrellaku/rideshare-mobile/commit/924e29d
-- Pas: https://github.com/blineravrellaku/rideshare-mobile/commit/23829d0
+## Versionet
+Para: https://github.com/blineravrellaku/rideshare-mobile/commit/924e29d6b2c2cb6fe2a2cd96d6bc0ffb7887d79b
+Pas: https://github.com/blineravrellaku/rideshare-mobile/commit/536b4ca562f81fe535bb5f8da630c0a57f9027d9
 
-## Versionet e repo-s
-- Repo: https://github.com/blineravrellaku/rideshare-mobile
-- Në GitHub Desktop e ruaj versionin e korrigjimit dhe raportin e fundit pas commit-it final.
+## Repo
+https://github.com/blineravrellaku/rideshare-mobile
