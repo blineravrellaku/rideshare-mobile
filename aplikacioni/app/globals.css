@@ -310,6 +310,33 @@ textarea {
   line-height: 1.5;
 }
 
+.request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.request-actions form {
+  flex: 1 1 160px;
+}
+
+.request-actions button {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.request-actions .secondary-action {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
 @media (max-width: 420px) {
   .phone-shell {
     padding: 16px 12px 20px;

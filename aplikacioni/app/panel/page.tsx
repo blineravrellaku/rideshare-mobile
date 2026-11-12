@@ -63,6 +63,11 @@ export default async function Panel({ searchParams }: PanelProps) {
             <p>
               ID ime GitHub: <code>{profil.id}</code>
             </p>
+            {profil.roli === "shofer" ? (
+              <Link href="/panel/kerkesat" className="secondary-button">
+                Shiko kërkesat për udhëtimet e mia
+              </Link>
+            ) : null}
           </>
         ) : (
           <p>Lista është publike. Për panelin, hyr me llogarinë tënde GitHub.</p>
@@ -95,7 +100,7 @@ export default async function Panel({ searchParams }: PanelProps) {
           </p>
         ) : null}
 
-        <p>Kërkesa për vend mbetet simulim këtë javë.</p>
+        <p>Kërkesat për vende ruhen dhe trajtohen nga shoferi.</p>
       </div>
     </main>
   );

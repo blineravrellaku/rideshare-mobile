@@ -3,56 +3,19 @@
 ## Rasti im
 P7-103, GitHub: blineravrellaku
 
-## Parashikimi
-Pritja ime ishte që kur zgjidhet udhëtimi me ID 2, lista duhet të tregojë 0 vende të lira, detajet duhet të shfaqin nisjen 08:15 dhe vlerën 0 vende, dhe butoni i kërkesës duhet të jetë joaktiv. Kjo është e saktë sipas skenarit të provës, sepse të dhënat duhet të jenë të njëjta në listë dhe në detajet, dhe asnjë rezervim real nuk duhet të simulohet.
+## Kontrolli i zbatimit
+Java 7 është e zbatuar në kod. Në [KartaUdhetimi.tsx](./aplikacioni/components/KartaUdhetimi.tsx), një udhëtim me `vende === 0` paraqitet si “Nuk ka vende të lira”. Faqja e detajeve e çaktivizon butonin për këtë rast, ndërsa faqja e kërkesës sqaron se simulimi nuk ruan kërkesë dhe nuk njofton shoferin. Rruga për ID të panjohur përdor faqen `not-found`.
 
-## Dy probleme
-1. Në listë, statusi për udhëtimin me 0 vende ishte i paqartë: “E mbushur”. Ky mesazh nuk shpjegonte qartë se nuk ka vende të lira dhe mund të ngatërronte përdoruesin.
-2. Në detajet dhe në faqen e kërkesës, aplikacioni duhej të jetë i qartë se nuk ka rezervim real dhe se çdo simulim duhet të jetë pa premtim.
+## Saktësimi i skenarit të provës
+Versioni i skemës i ruajtur në repo mbush ID 2 si Fushë Kosovë → AAB, ora 08:15 dhe 1 vend i lirë. Prandaj parashikimi i mëparshëm “Ferizaj → AAB, 0 vende” nuk përputhej me të dhënat fillestare dhe nuk mund të raportohej si vëzhgim real. Për të provuar gjendjen pa vende, vendet duhet të vendosen përkohësisht në 0 në databazën që përdor aplikacioni.
 
-## Korrigjimi
-Skedari: aplikacioni/components/KartaUdhetimi.tsx
-Arsyeja: statusi i kartës është elementi i parë që përdoruesi sheh në listë, kështu që duhet të jetë sa më i qartë. Ndryshova mesazhin për rastin ku vende === 0 në “Nuk ka vende të lira”, për të përputhur me parashikimin dhe për të shmangur konfuzionin gjatë testit.
+## Provat dhe statusi
 
-## Prova 1
-Hapat:
-1. Hap aplikacionin në localhost dhe zgjidh udhëtimin me ID 2 nga lista.
-2. Hap detajet e atij udhëtimi.
-3. Kontrollo emrin, orën dhe numrin e vendeve.
-Pritshmëria:
-Përdoruesi duhet të shohë të njëjtin udhëtim në listë dhe në detajet: Ferizaj → AAB, ora 08:15 dhe 0 vende të lira.
-Vëzhgimi:
-Në aplikacionin real, udhëtimi i zgjedhur shfaqet me të njëjtin ID dhe vlera të njëjta. Kjo tregon që lidhja nga lista te detajet funksionon dhe nuk ka ndryshim të rastësishëm midis ekranëve.
+| Prova | Kontrolli | Statusi në këtë mjedis |
+|---|---|---|
+| Konsistenca e listës dhe detajeve | I njëjti udhëtim duhet të shfaqë të njëjtën nisje, orë dhe numër vendesh. | Kodi i lexon të dyja faqet nga `gjejUdhetimin`; nuk u bë provë live në browser. |
+| Udhëtim pa vende | Statusi duhet të thotë “Nuk ka vende të lira” dhe kërkesa duhet të jetë e bllokuar. | Kontrolluar në kod; nuk u ndryshua databaza për test live. |
+| ID e panjohur | Duhet të shfaqet faqja “Udhëtimi nuk u gjet” me kthim te lista. | Rruga `not-found` ekziston; nuk u testua me server të nisur. |
 
-## Prova 2
-Hapat:
-1. Vëre një udhëtim me vende = 0.
-2. Shiko kartën në listë.
-3. Hap detajet dhe kontrollo butonin e kërkesës.
-Pritshmëria:
-Listës duhet t’i shfaqet statusi “Nuk ka vende të lira” dhe butoni në detajet duhet të jetë joaktiv.
-Vëzhgimi:
-Pas korrigjimit, statusi është i qartë dhe i përputhshëm me skenarin e testimit. Kjo përmirëson qartësinë për përdoruesin dhe ndalon një premtim të gabuar për vend të lirë.
-
-## Prova 3
-Hapat:
-1. Provo një ID të panjohur ose një udhëtim që nuk ekziston.
-2. Shiko mesazhin që kthehet.
-3. Kthehu te lista përmes lidhjes përfundimtare.
-Pritshmëria:
-Përdoruesi duhet të marrë një mesazh të qartë “Udhëtimi nuk u gjet” dhe një mënyrë të lehtë për t’u kthyer te lista.
-Vëzhgimi:
-Në projektin aktual, faqja e not-found në aplikacion ofron një mesazh të qartë dhe butonin e kthimit. Kjo është një trajtim i dobishëm dhe nuk ngatërron përdoruesin.
-
-## Ndryshimi i ri
-Korrigjimi i bërë: metoda e statusit në aplikacioni/components/KartaUdhetimi.tsx është rishkruar në “Nuk ka vende të lira” për rastin ku vende === 0.
-
-## Ndihma nga AI
-Në këtë detyrë nuk kam përdorur AI për të shkruar logjikën ose për të bërë ndryshimin final. Kam verifikuar me vëzhgim të projektit, kontrollin e skedarëve dhe testimin e rrjedhës në aplikacion.
-
-## Versionet
-Para: https://github.com/blineravrellaku/rideshare-mobile/commit/924e29d6b2c2cb6fe2a2cd96d6bc0ffb7887d79b
-Pas: https://github.com/blineravrellaku/rideshare-mobile/commit/536b4ca562f81fe535bb5f8da630c0a57f9027d9
-
-## Repo
-https://github.com/blineravrellaku/rideshare-mobile
+## Përfundimi
+Nuk kërkohej ndryshim i ri në kod për korrigjimin e Java 7: statusi i kartës është tashmë i qartë dhe përputhet me sjelljen e butonit në detaje. Ky dokument saktëson pretendimet e provës që nuk mbështeteshin nga të dhënat fillestare. Provat që varen nga databaza dhe browser-i shënohen si të paverifikuara, jo si rezultate të kryera.
