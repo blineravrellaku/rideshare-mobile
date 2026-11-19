@@ -1,29 +1,47 @@
-# RideShare — Java 8 · Kërkesë reale dhe përgjigje nga shoferi
+# RideShare — Java 8 · Leja e vendndodhjes dhe vendtakimi
 
-## Qëllimi
-Java 8 zëvendëson ekranin demonstrues të kërkesës me rrjedhë të ruajtur në Neon. Udhëtari hyn me GitHub dhe dërgon një kërkesë; shoferi i caktuar e pranon ose e refuzon nga paneli. Pranimi ul numrin e vendeve vetëm një herë dhe vetëm nëse ka ende vende të lira.
-
-## Çfarë u shtua
-- `aplikacioni/schema-java08.sql` krijon tabelën `kerkesat` me unikësi për një udhëtar për udhëtim dhe funksionet e databazës për krijim, pranim e refuzim.
-- `aplikacioni/lib/kerkesat.ts` zbaton leximin dhe veprimet duke përdorur identitetin nga sesioni, jo nga formulari.
-- `aplikacioni/app/udhetimi/[id]/kerkesa/` ruan kërkesën dhe paraqet statusin real.
-- `aplikacioni/app/panel/kerkesat/` u jep shoferëve vetëm kërkesat për udhëtimet që u përkasin.
-- Paneli i shoferit ka lidhje te lista e kërkesave.
-
-## Rregullat e sigurisë dhe të dhënave
-- Të gjitha veprimet server-side marrin profilin nga sesioni dhe kontrollojnë rolin/pronësinë në databazë.
-- Udhëtari nuk mund të kërkojë vend në udhëtimin e vet dhe nuk mund të dërgojë kërkesë të dytë për të njëjtin udhëtim.
-- Kërkesa në pritje nuk e zë vendin; vetëm pranimi e ul kapacitetin. Funksioni i databazës bllokon rreshtat përkatës gjatë pranimit që dy kërkesa paralele të mos zënë të njëjtin vend.
-- Nëse shoferi nuk ka vende kur provon pranimin, kërkesa mbetet në pritje dhe shfaqet mesazh i qartë.
-
-## Konfigurimi i databazës
-Pas skemës së Javës 5, ekzekuto një herë të gjithë `aplikacioni/schema-java08.sql` në SQL Editor të Neon. Aplikacioni përdor tabelën `profilet` dhe kolonën `udhetimet.shofer_id` të krijuara më herët. Pa këtë migrim, veprimet e reja do të raportojnë gabim të databazës.
+## Sjellja e shtuar
+- Hapja e faqes nuk kërkon leje për vendndodhjen. Kërkesa nis vetëm pasi shtypet “Përdor vendndodhjen time”.
+- Nëse leja refuzohet ose vendndodhja nuk merret, udhëtari mund ta shkruajë vendtakimin vetë.
+- Pasi të ketë zgjedhur vendndodhjen ose të ketë shkruar vendtakimin, udhëtari mund të përdorë butonin “Simulo përfundimin e pritjes”.
+- Ky është demonstrim vetëm në shfletues: koordinatat dhe vendtakimi manual nuk ruhen ose dërgohen. Ndërfaqja nuk shfaq koordinata apo sekrete.
 
 ## Provat
-1. Hyr si udhëtar, dërgo kërkesë për udhëtimin me vende dhe rifresko faqen; statusi duhet të mbetet në pritje.
-2. Dërgo përsëri kërkesën për të njëjtin udhëtim; databaza nuk duhet të krijojë dublikatë.
-3. Hyr si shofer i caktuar, prano kërkesën dhe verifiko që vendet ulen me një; provo edhe refuzimin në një kërkesë tjetër.
-4. Provo hyrjen te `/panel/kerkesat` me udhëtar ose shofer tjetër; veprimi duhet të refuzohet dhe asnjë vend nuk duhet të ndryshojë.
-5. Kur vendet të jenë zero, pranimi duhet të dështojë pa ndryshuar statusin e kërkesës.
 
-Build-i/lint-i verifikojnë kodin në këtë mjedis. Provat që kërkojnë OAuth dhe Neon duhet të kryhen pasi të ekzekutohet migrimi; ato nuk pretendohen si të kryera lokalisht.
+### Prova 1
+**Hapat:** Hapa faqen dhe kontrollova nëse shfletuesi kërkoi leje. Pastaj shtypa “Përdor vendndodhjen time” dhe provova përgjigjen e pranimit të lejes.
+
+**Pritshmëria:** Hapja e faqes nuk duhet të kërkojë leje; kërkesa duhet të nisë vetëm pas klikimit dhe pranimi të japë konfirmim pa shfaqur koordinatat.
+
+**Çfarë pashë realisht:** Në faqen e nisjes u shfaq “Vendndodhja nuk kërkohet pa shtypur butonin.” Testi në shfletues regjistroi zero thirrje të API-së para klikimit. Pas klikimit provova përgjigjen e lejuar të API-së dhe pashë “Leja u pranua. Koordinatat nuk shfaqen dhe nuk dërgohen.” Përgjigjja e lejuar u simulua në test; nuk u pretendua se u pa dritarja origjinale e lejes së sistemit.
+
+### Prova 2
+**Hapat:** Simulova refuzimin e lejes, shkrova “Hyrja kryesore e AAB-së” te vendtakimi manual dhe shtypa “Simulo përfundimin e pritjes”.
+
+**Pritshmëria:** Refuzimi duhet të ofrojë vendtakimin manual; pas plotësimit të tij, simulimi duhet të përfundojë dhe të konfirmohet.
+
+**Çfarë pashë realisht:** U shfaq “Leja u refuzua. Shkruaj vendtakimin manualisht për të vazhduar.” Pas plotësimit të fushës, simulimi u përfundua dhe u shfaq “Simulimi përfundoi; asnjë vendndodhje nuk u publikua.” Refuzimi dhe simulimi u provuan në aplikacion me përgjigje të simuluar të API-së së shfletuesit; pritje reale nuk u krye.
+
+### Prova 3
+**Hapat:** Kontrollova mesazhet pas pranimit dhe pas përfundimit të simulimit; kontrollova gjithashtu që komponenti nuk bën kërkesë serveri për koordinatat ose vendtakimin.
+
+**Pritshmëria:** Dëshmitë dhe ndërfaqja nuk duhet të publikojnë koordinata reale, vendndodhje personale apo sekrete.
+
+**Çfarë pashë realisht:** Ndërfaqja shfaqi vetëm statusin e lejes dhe konfirmimin e simulimit; nuk shfaqi koordinata. Përbërësi përdor gjendje lokale dhe nuk dërgon vendndodhje te serveri. Në dokument nuk kam vendosur koordinata reale ose kredenciale.
+
+### Prova me një hyrje të re
+**Hyrja që provova:** Hapa faqen pa klikuar butonin e vendndodhjes, pastaj testova lejimin dhe refuzimin pas klikimit.
+
+**Parashikimi im para klikimit:** Shfletuesi nuk do të kërkojë vendndodhjen vetëm nga hapja e faqes; klikimi do ta kërkojë dhe refuzimi do të lejojë vendtakim manual.
+
+**Çfarë pashë realisht:** Para klikimit nuk pati thirrje të API-së. Pas klikimit, përgjigjja e simuluar e lejimit dha mesazhin e konfirmimit pa koordinata; përgjigjja e simuluar e refuzimit shfaqi fushën manuale dhe lejoi përfundimin e simulimit.
+
+**Skedari dhe funksioni që e shpjegojnë:** [Vendtakimi.tsx](./aplikacioni/components/Vendtakimi.tsx) — `kerkoVendndodhjen()` thirret nga butoni, trajton pranimin/refuzimin dhe nuk përdor vlerat e koordinatave; fusha manuale dhe butoni i simulimit mbahen në gjendje lokale. [page.tsx](./aplikacioni/app/page.tsx) e vendos përbërësin në faqen kryesore.
+
+**Çfarë kuptova ose korrigjova:** Dokumenti i mëparshëm përshkruante kërkesat e udhëtimit në Neon, por nuk dokumentonte provat e lejes së vendndodhjes që kërkonte kontrolli. Shtova rrjedhën manuale dhe simulimin, dhe shënova qartë se pranimi/refuzimi u simulua në test, jo përmes dritares origjinale të lejes.
+
+## Verifikimi teknik
+`npm run lint` dhe `npm run build` kaluan. Faqja u hap lokalisht dhe të dyja rrjedhat (pranim dhe refuzim me vendtakim manual) u kontrolluan në browser me përgjigje të simuluara të API-së së vendndodhjes.
+
+## Funksionaliteti ekzistues i kërkesave të udhëtimit
+Java 8 përfshin gjithashtu kërkesat reale në Neon: udhëtari dërgon kërkesë pasi hyn me GitHub; shoferi i caktuar e pranon ose refuzon nga paneli. Vetëm pranimi ul numrin e vendeve dhe veprimi kontrollon që ka ende vende të lira. Skema dhe veprimet janë te `aplikacioni/schema-java08.sql` dhe `aplikacioni/lib/kerkesat.ts`; kjo pjesë kërkon migrimin në Neon dhe OAuth të konfiguruar. Provat që varen nga këto shërbime nuk u kryen në këtë kontroll lokal.

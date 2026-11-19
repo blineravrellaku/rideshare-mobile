@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 
+import Vendtakimi from "@/components/Vendtakimi";
 import KartaUdhetimi from "@/components/KartaUdhetimi";
 import { lexoUdhetimet, type Udhetim } from "@/lib/udhetimet";
 
@@ -22,6 +23,7 @@ export default async function Home() {
               Hyr / Paneli im
             </Link>
           </header>
+          <Vendtakimi />
           <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
           <Link href="/" className="primary-button">
             Provo përsëri
@@ -42,6 +44,7 @@ export default async function Home() {
           </Link>
         </header>
 
+        <Vendtakimi />
         <section className="ride-list" aria-label="Lista e udhëtimeve">
           {udhetimet.length === 0 ? (
             <p>Nuk ka udhëtime për momentin.</p>
